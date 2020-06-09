@@ -25,16 +25,28 @@ public class SumMultipleThreads implements Runnable{
 		for(long i=0; i<to/1000000; i++) {
 			sumRunners.add(new SumMultipleThreads((i*1000000)+1, (i+1)*1000000));
 		}
+		
 
 		ArrayList<Thread> threadsForSubSum = new ArrayList<Thread>();
-
 		for(SumMultipleThreads runner:sumRunners) {
 			Thread thread = new Thread(runner);
 			thread.start();
 			threadsForSubSum.add(thread);
 		}
-
+		
+		
+		for(Thread run:threadsForSubSum) {
+			try {
+				run.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+			
 		long grandTotal = 0;
+		
 		for(SumMultipleThreads runner:sumRunners) {
 			grandTotal += runner.totalSum;
 		}
